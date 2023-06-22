@@ -6,11 +6,24 @@ import core.basesyntax.model.User;
 import core.basesyntax.service.exceptions.PasswordException;
 import core.basesyntax.service.exceptions.UserRegistrationException;
 
+/**
+ * Клас {@code RegistrationServiceImpl} представляє реалізацію інтерфейсу {@link RegistrationService}.
+ * Він надає методи для реєстрації користувача та виконання перевірок користувача.
+ */
 public class RegistrationServiceImpl implements RegistrationService {
 
     private static final int MIN_USER_AGE = 18;
     private static final int MIN_PASSWORD_LENGTH = 6;
     private final StorageDao storageDao = new StorageDaoImpl();
+
+    /**
+     * Реєструє користувача, виконуючи перевірки та додаючи користувача до сховища.
+     *
+     * @param user користувач для реєстрації
+     * @return зареєстрований користувач
+     * @throws UserRegistrationException якщо реєстрація користувача не вдалась
+     * @throws PasswordException         якщо пароль не відповідає вимогам
+     */
 
     @Override
     public User register(User user) {
@@ -18,6 +31,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         return storageDao.add(user);
     }
 
+    /**
+     * Виконує перевірку користувача.
+     *
+     * @param user користувач для перевірки
+     * @throws UserRegistrationException якщо перевірка користувача не вдалась
+     * @throws PasswordException         якщо пароль не відповідає вимогам
+     */
     private void userValidate(User user) {
         if (user == null) {
             throw new UserRegistrationException("User cannot be null");
