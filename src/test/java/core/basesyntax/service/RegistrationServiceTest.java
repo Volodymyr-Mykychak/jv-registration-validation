@@ -109,21 +109,16 @@ class RegistrationServiceTest {
     void register_sameLogin_notOk() {
         // Створення першого користувача з унікальним логіном
         User normalUser1 = createUser(DEFAULT_LOGIN, VALID_PASSWORD, MIN_USER_AGE);
-
         // Створення другого користувача з тим самим логіном, але з іншими даними
         User normalUser2 = createUser(DEFAULT_LOGIN, VALID_PASSWORD + VALID_PASSWORD, MIN_USER_AGE * 2);
-
         // Реєстрація першого користувача
         registrationService.register(normalUser1);
-
         // Перевірка, що при спробі реєстрації другого користувача з вже існуючим логіном
         // виникає виняток UserRegistrationException
         assertThrows(UserRegistrationException.class, () -> registrationService.register(normalUser2));
-
         // Очікуваний стан бази даних - містить тільки першого користувача
         List<User> expectedDbState = new ArrayList<>();
         expectedDbState.add(normalUser1);
-
         // Перевірка стану бази даних
         assertEquals(Storage.people, expectedDbState, "Only first user must be saved in db");
     }
@@ -137,13 +132,10 @@ class RegistrationServiceTest {
     void register_userTooYoung_notOk() {
         // Створення користувача з надто молодим віком
         User youngUser = createUser(DEFAULT_LOGIN, VALID_PASSWORD, MIN_USER_AGE - 1);
-
         // Перевірка, що при спробі реєстрації надто молодого користувача виникає виняток UserRegistrationException
         assertThrows(UserRegistrationException.class, () -> registrationService.register(youngUser));
-
         // Очікуваний стан бази даних - порожній, користувач не повинен бути збережений
         List<User> expectedDbState = new ArrayList<>();
-
         // Перевірка стану бази даних
         assertEquals(Storage.people, expectedDbState, "User mustn't be saved");
     }
@@ -157,13 +149,10 @@ class RegistrationServiceTest {
     void register_insecurePassword_notOk() {
         // Створення користувача з небезпечним паролем (порожній пароль)
         User user = createUser(DEFAULT_LOGIN, "", MIN_USER_AGE);
-
         // Перевірка, що при спробі реєстрації користувача з небезпечним паролем виникає виняток PasswordException
         assertThrows(PasswordException.class, () -> registrationService.register(user));
-
         // Очікуваний стан бази даних - порожній, користувач не повинен бути збережений
         List<User> expectedDbState = new ArrayList<>();
-
         // Перевірка стану бази даних
         assertEquals(Storage.people, expectedDbState, "User mustn't be saved");
     }
